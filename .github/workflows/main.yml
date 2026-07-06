@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ps3dev/ps3toolchain:latest
+      image: ghcr.io/ps3dev/ps3dev:latest
     
     steps:
     - name: Clonar código fuente
