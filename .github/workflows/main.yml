@@ -3,22 +3,35 @@ name: Compilar PS3 EBOOT
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/ps3dev/ps3dev:latest
     
     steps:
-    - name: Clonar código fuente
+    - name: Clonar código fuente de la Tienda
       uses: actions/checkout@v4
 
-    - name: Compilar EBOOT.BIN (PSL1GHT)
+    - name: Instalar Dependencias Linux
       run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential autoconf automake bison flex libncurses5-dev libreadline-dev libusb-dev texinfo libgmp3-dev libmpfr-dev libelf-dev python3 python3-dev libssl-dev pkg-config zlib1g-dev libtool libtool-bin wget git
+
+    - name: Fabricar el Compilador de PS3 (Tardará 1 hora aprox)
+      run: |
+        export PS3DEV=/home/runner/ps3dev
+        export PSL1GHT=$PS3DEV/psl1ght
+        export PATH=$PATH:$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin
+        git clone https://github.com/ps3dev/ps3toolchain.git
+        cd ps3toolchain
+        ./toolchain.sh
+
+    - name: Compilar EBOOT.BIN de WIKISTORE
+      run: |
+        export PS3DEV=/home/runner/ps3dev
+        export PSL1GHT=$PS3DEV/psl1ght
+        export PATH=$PATH:$PS3DEV/bin:$PS3DEV/ppu/bin:$PS3DEV/spu/bin
         make clean
         make
 
