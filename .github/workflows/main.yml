@@ -1,0 +1,31 @@
+name: Compilar PS3 EBOOT
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ps3dev/ps3toolchain:latest
+    
+    steps:
+    - name: Clonar código fuente
+      uses: actions/checkout@v3
+
+    - name: Compilar EBOOT.BIN (PSL1GHT)
+      run: |
+        make clean
+        make
+
+    - name: Subir EBOOT.BIN
+      uses: actions/upload-artifact@v3
+      with:
+        name: PS3-Ejecutable
+        path: |
+          EBOOT.BIN
+          indie_store.elf
