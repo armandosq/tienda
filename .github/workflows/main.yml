@@ -27,7 +27,7 @@ jobs:
         cd ps3toolchain
         ./toolchain.sh
 
-    - name: Compilar EBOOT.BIN de WIKISTORE
+    - name: Compilar EBOOT.BIN de Indie Store
       run: |
         export PS3DEV=/home/runner/ps3dev
         export PSL1GHT=$PS3DEV/psl1ght
